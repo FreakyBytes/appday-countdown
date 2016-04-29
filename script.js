@@ -1,11 +1,24 @@
 
-var config = {}
+//var config = {}
+var config = {
+	"start": parse_date([2016, 04, 29, 10, 00, 00]),
+	"end": parse_date([2016, 04, 30, 10, 26, 00]),
+	"critical_time": 1800,
+	"goal_time": 600,
+	"goal_critical": 60,
+	"goals": {
+		"Goal #1": parse_date([2016, 04, 30, 01, 34, 00]),
+		"Goal blablabal 2": parse_date([2016, 04, 30, 01, 40, 00]),
+		"Goal #3": parse_date([2016, 04, 30, 03, 00, 00])
+	}
+}
 
 function parse_date(array) {
 	if( array == undefined || array == false )
 		return false;
 	else
-		return Date(array[0], array[1], array[2], array[3], array[4], array[5]).getTime();
+		// month is zero based - for some strange reason
+		return (new Date(array[0], array[1]-1, array[2], array[3], array[4], array[5], 00)).getTime();
 }
 
 function parse_config() {
@@ -23,8 +36,7 @@ function parse_config() {
 	}
 }
 
-function date_diff(now, date) {
-	var diff = date - now;
+function calc_diff(diff) {
 	// do not return negative numbers
 	if( diff <= 0 )
 		return [0, 0, 0, 0];
@@ -37,18 +49,62 @@ function date_diff(now, date) {
 	];
 }
 
+function diff2text(diff) {
+	return ("0"+diff[0]).slice(-2) + ":" + ("0"+diff[1]).slice(-2) + ":" + ("0"+diff[2]).slice(-2);
+}
+
 function refresh_countdown() {
-	var now = Date().getTime();
+	var now = (new Date()).getTime();
 	// if current date is before the start, set start date as "now"
-	if( config.start != false && now < config.start )
+	if( config.start != false && now < config.start && false)
 		now = config.start;
 	
-	countdown = date_diff(now, config.end);
-	$(".main > .clock").text(countdown[0]+":"+countdown[1]+":"+countdown[2]);
+	var main_diff = config.end - now;
+	var countdown = calc_diff(main_diff);
+	$(".main > .clock").text(diff2text(countdown));
+	// check if time is critical
+	if( main_diff <= config.critical_time*1000 )
+		$(".main > .clock").addClass("critical");
+	else
+		$(".main > .critical").removeClass("critical");
+
+	// find next goal
+	var goal_name = "";
+	var goal_time = 0;
+	var goal_diff = 0;
+	var found = false;
+	for( goal_name in config.goals ) {
+		goal_time = config.goals[goal_name];
+		var goal_diff = goal_time - now;
+		if( goal_time >= now && goal_diff <= config.goal_time*1000 ) {
+			// goal is in the future, but not too far away.
+			found = true;
+			break;	
+		}
+	}
+	if( found ) {
+		var goal_countdown = calc_diff(goal_diff);
+		$(".goal > .clock").text(diff2text(goal_countdown));
+		$(".goal > .text").text("Until " + goal_name);
+		if( goal_diff <= config.goal_critical )
+			$(".goal > .clock").addClass("critical");
+		else
+			$(".goal > .critical").removeClass("critical");
+		$(".goal").show();
+	}
+	else
+		$(".goal").hide();
+
+
 }
 
 $(document).ready(function () {
-	parse_config();
+	//parse_config();
 	window.setInterval(refresh_countdown, 1000);
+	// update countdown
+	refresh_countdown()
+	// display end time
+	end = new Date(config.end);
+	$(".main > .text").html("Until " + end.toISOString().replace("T", " ").replace("Z", ""))
 });
 
