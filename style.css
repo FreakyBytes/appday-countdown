@@ -6,6 +6,7 @@ html, body {
 	top: 0; right: 0; bottom: 0; left: 0;
 	background-color: #000;
 	color: #EEE;
+	overflow-x: hidden;
 }
 
 div.content {
@@ -19,6 +20,7 @@ div.content {
 
 .clock {
 	font-size: 400%;
+	text-shadow: 0 0 30px #DDD;
 }
 .text {
 	font-size: 100%;
@@ -30,7 +32,6 @@ div.content {
 
 div.main {
 	font-size: 3em;
-	text-shadow: 0 0 30px #DDD;
 }
 div.goal {
 	margin-top: 120px;

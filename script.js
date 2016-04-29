@@ -8,7 +8,7 @@ var config = {
 	"goal_critical": 60,
 	"goals": {
 		"Goal #1": parse_date([2016, 04, 30, 01, 34, 00]),
-		"Goal blablabal 2": parse_date([2016, 04, 30, 01, 40, 00]),
+		"Goal blablabal 2": parse_date([2016, 04, 30, 01, 50, 00]),
 		"Goal #3": parse_date([2016, 04, 30, 03, 00, 00])
 	}
 }
@@ -76,7 +76,7 @@ function refresh_countdown() {
 	for( goal_name in config.goals ) {
 		goal_time = config.goals[goal_name];
 		var goal_diff = goal_time - now;
-		if( goal_time >= now && goal_diff <= config.goal_time*1000 ) {
+		if( goal_time >= now-1500 && goal_diff <= config.goal_time*1000 ) {
 			// goal is in the future, but not too far away.
 			found = true;
 			break;	
@@ -86,7 +86,7 @@ function refresh_countdown() {
 		var goal_countdown = calc_diff(goal_diff);
 		$(".goal > .clock").text(diff2text(goal_countdown));
 		$(".goal > .text").text("Until " + goal_name);
-		if( goal_diff <= config.goal_critical )
+		if( goal_diff <= config.goal_critical*1000 )
 			$(".goal > .clock").addClass("critical");
 		else
 			$(".goal > .critical").removeClass("critical");
@@ -100,11 +100,11 @@ function refresh_countdown() {
 
 $(document).ready(function () {
 	//parse_config();
-	window.setInterval(refresh_countdown, 1000);
+	window.setInterval(refresh_countdown, 200);
 	// update countdown
 	refresh_countdown()
 	// display end time
 	end = new Date(config.end);
-	$(".main > .text").html("Until " + end.toISOString().replace("T", " ").replace("Z", ""))
+	$(".main > .text").html("Until " + end.getFullYear() +"-" + ("0"+(end.getMonth()+1)).slice(-2) + "-" + ("0"+end.getDate()).slice(-2) + " " + ("0"+end.getHours()).slice(-2) + ":" + ("0"+end.getMinutes()).slice(-2) + ":" + ("0"+end.getSeconds()).slice(-2));
 });
 
