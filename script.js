@@ -21,14 +21,14 @@ function parse_date(array) {
 		return (new Date(array[0], array[1]-1, array[2], array[3], array[4], array[5], 00)).getTime();
 }
 
-function parse_config() {
-	console.log($("#jsonConfig").text());
-	var json = JSON.parse($("#jsonConfig").html());
+function parse_config(json) {
 	console.log(json);
 	config = {
 		"start": parse_date(json.start),
 		"end": parse_date(json.end),
+		"critical_time": json.critical_time,
 		"goal_time": json.goal_time,
+		"goal_critical": json.goal_critical,
 		"goals": {}
 	}
 	for(var goal_name in json.goals) {
@@ -95,11 +95,9 @@ function refresh_countdown() {
 	else
 		$(".goal").hide();
 
-
 }
 
 $(document).ready(function () {
-	//parse_config();
 	window.setInterval(refresh_countdown, 200);
 	// update countdown
 	refresh_countdown()
