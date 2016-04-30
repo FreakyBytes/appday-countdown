@@ -56,7 +56,7 @@ function diff2text(diff) {
 function refresh_countdown() {
 	var now = (new Date()).getTime();
 	// if current date is before the start, set start date as "now"
-	if( config.start != false && now < config.start && false)
+	if( config.start != false && now < config.start )
 		now = config.start;
 	
 	var main_diff = config.end - now;
