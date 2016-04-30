@@ -7,6 +7,25 @@ html, body {
 	background-color: #000;
 	color: #EEE;
 	overflow-x: hidden;
+	font-family: Verdana, serif;
+}
+footer {
+	color: #666;
+	position: absolute;
+	bottom: 4px;
+	right: 4px;
+	text-align: right;
+	font-size: 0.65em;
+}
+footer > span {
+	color: #AA5D24;
+}
+footer > a {
+	color: #666;
+	text-decoration: none;
+}
+footer > a:hover {
+	text-decoration: underline;
 }
 
 div.content {
@@ -14,7 +33,6 @@ div.content {
 	margin-top: 150px;
 	width: 100%;
 	text-align: center;
-	font-family: Verdana, serif;
 	font-weight: bold;
 }
 
