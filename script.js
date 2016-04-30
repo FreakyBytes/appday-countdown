@@ -1,19 +1,7 @@
 
-//var config = {}
-var config = {
-	"start": parse_date([2016, 04, 29, 10, 00, 00]),
-	"end": parse_date([2016, 04, 30, 10, 26, 00]),
-	"critical_time": 1800,
-	"goal_time": 600,
-	"goal_critical": 60,
-	"goals": {
-		"Goal #1": parse_date([2016, 04, 30, 01, 34, 00]),
-		"Goal blablabal 2": parse_date([2016, 04, 30, 01, 50, 00]),
-		"Goal #3": parse_date([2016, 04, 30, 03, 00, 00])
-	}
-}
-
 function parse_date(array) {
+	// [year, month, day, hour, minutes, seconds]
+	// parses a date array into unix time stamp in milliseconds or false
 	if( array == undefined || array == false )
 		return false;
 	else
@@ -22,6 +10,7 @@ function parse_date(array) {
 }
 
 function parse_config(json) {
+	// parses the config
 	console.log(json);
 	config = {
 		"start": parse_date(json.start),
@@ -37,6 +26,8 @@ function parse_config(json) {
 }
 
 function calc_diff(diff) {
+	// calculates an array with [hours, minutes, seconds, milliseconds] from a unix timestamp diff
+
 	// do not return negative numbers
 	if( diff <= 0 )
 		return [0, 0, 0, 0];
@@ -50,16 +41,30 @@ function calc_diff(diff) {
 }
 
 function diff2text(diff) {
-	return ("0"+diff[0]).slice(-2) + ":" + ("0"+diff[1]).slice(-2) + ":" + ("0"+diff[2]).slice(-2);
+	// returns a string representation of the returned array from calc_diff
+	return (diff[0]>100 ? diff[0] : ("0"+diff[0]).slice(-2)) + ":" + ("0"+diff[1]).slice(-2) + ":" + ("0"+diff[2]).slice(-2);
+}
+
+function date2text(date) {
+	// returns a string representation of a javascript date object
+	return date.getFullYear() +"-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + ("0"+date.getDate()).slice(-2) + " " + ("0"+date.getHours()).slice(-2) + ":" + ("0"+date.getMinutes()).slice(-2) + ":" + ("0"+date.getSeconds()).slice(-2);
 }
 
 function refresh_countdown() {
-	var now = (new Date()).getTime();
-	// if current date is before the start, set start date as "now"
-	if( config.start != false && now < config.start )
-		now = config.start;
+	// does the actual heavy lifting ;)
 	
-	var main_diff = config.end - now;
+	var now = (new Date()).getTime();
+	// if current date is before the start, count time until start
+	if( config.start != false && now < config.start ) {
+		aim = config.start;
+		$(".main > .text").text("Until start@ " + date2text(new Date(aim)));
+	}
+	else {
+		aim = config.end;
+		$(".main > .text").text("Until " + date2text(new Date(aim)));
+	}
+	
+	var main_diff = aim - now;
 	var countdown = calc_diff(main_diff);
 	$(".main > .clock").text(diff2text(countdown));
 	// check if time is critical
@@ -98,11 +103,9 @@ function refresh_countdown() {
 }
 
 $(document).ready(function () {
+	// set intervall/timer
 	window.setInterval(refresh_countdown, 200);
-	// update countdown
+	// update countdown imediatly
 	refresh_countdown()
-	// display end time
-	end = new Date(config.end);
-	$(".main > .text").html("Until " + end.getFullYear() +"-" + ("0"+(end.getMonth()+1)).slice(-2) + "-" + ("0"+end.getDate()).slice(-2) + " " + ("0"+end.getHours()).slice(-2) + ":" + ("0"+end.getMinutes()).slice(-2) + ":" + ("0"+end.getSeconds()).slice(-2));
 });
 
