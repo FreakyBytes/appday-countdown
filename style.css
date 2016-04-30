@@ -47,6 +47,10 @@ div.content {
 	color: red;
 	text-shadow: 0 0 30px #D00;
 }
+.warmup {
+	color: #44F;
+	text-shadow: 0 0 40px #AAF;
+}
 
 div.main {
 	font-size: 3em;

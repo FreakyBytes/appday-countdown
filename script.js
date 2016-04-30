@@ -55,23 +55,27 @@ function refresh_countdown() {
 	
 	var now = (new Date()).getTime();
 	// if current date is before the start, count time until start
-	if( config.start != false && now < config.start ) {
+	if( config.start != false && now < config.start )
 		aim = config.start;
-		$(".main > .text").text("Until start@ " + date2text(new Date(aim)));
-	}
-	else {
+	else 
 		aim = config.end;
-		$(".main > .text").text("Until " + date2text(new Date(aim)));
-	}
 	
 	var main_diff = aim - now;
 	var countdown = calc_diff(main_diff);
 	$(".main > .clock").text(diff2text(countdown));
 	// check if time is critical
-	if( main_diff <= config.critical_time*1000 )
-		$(".main > .clock").addClass("critical");
-	else
-		$(".main > .critical").removeClass("critical");
+	if( aim == config.end ) {
+	       if( main_diff <= config.critical_time*1000 )
+			$(".main > .clock").removeClass("warmup").addClass("critical");
+		else
+			$(".main > .clock").removeClass("critical warmup");
+
+		$(".main > .text").text("Until " + date2text(new Date(aim)));
+	}
+	else if( aim == config.start ) {
+		$(".main > .clock").addClass("warmup");
+		$(".main > .text").text("Until start@" + date2text(new Date(aim)));
+	}
 
 	// find next goal
 	var goal_name = "";
