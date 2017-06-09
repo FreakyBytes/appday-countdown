@@ -2,8 +2,8 @@ parse_config({
 	"start": [2017, 06, 09, 13, 37, 42],
 	"end": [2017, 06, 10, 13, 37, 42],
 	"critical_time": 3600,
-	"goal_time": 600,
-	"goal_critical": 180,
+	"goal_time": 1200,
+	"goal_critical": 3030300,
 	"goals": {
 		"Intermediate #1": [2017, 06, 09, 16, 37, 00],
 		"Intermediate #2": [2017, 06, 09, 21, 37, 00],
