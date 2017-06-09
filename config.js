@@ -5,7 +5,7 @@ parse_config({
 	"goal_time": 600,
 	"goal_critical": 180,
 	"goals": {
-		"Intermediate #1": [2017, 06, 09, 17, 37, 00],
+		"Intermediate #1": [2017, 06, 09, 16, 37, 00],
 		"Intermediate #2": [2017, 06, 09, 21, 37, 00],
 		"Intermediate #3": [2017, 06, 10, 01, 37, 00],
 		"Intermediate #4": [2017, 06, 10, 09, 37, 00]
